@@ -498,7 +498,7 @@ func printName(_ name: String) {
     print(name)
 }
 
-var myName: String! = nil
+var myName: String? = nil
 
 // printName(myName) 전달되는 값의 타입이 다르기 때문에 컴파일 오류 발생
 
@@ -511,4 +511,465 @@ if let name: String = myName {
 // 상수 사용 범위를 벗어낚기 때문에 컴파이 오류 발생
 //printName(name)
 
+var myName2: String! = nil
 
+if let name2: String = myName2 {
+    printName(name2)
+} else {
+    print("myName2 == nil ")
+}
+
+// name 상수는 if-let 구문내에서만 사용 가능합니다.
+// 상수 사용범위를 벗어났기 떄문에 컴파일 오류 발생
+
+//printName(name2)
+
+var myName3: String? = "yagom"
+var yourName3: String? = nil
+
+if let name3 = myName3, let friend3 = yourName3 {
+    print("\(name3) and \(friend3)")
+}
+// yourName3이 nil이기 때문에 실행되지 않음
+
+yourName3 = "hana"
+
+if let name3 = myName, let friend3 = yourName3 {
+    print("\(name3) and \(friend3)")
+}
+
+//Force Unwrapping
+// 옵셔널의 값을 강제로 추출
+
+var myName4: String? = "yagom"
+
+printName(myName4!)
+
+myName4 = nil
+
+//print(myName4!)
+//강제 추출시 값이 없으므로 런타임 오류 발생
+
+var yourName4: String! = nil
+
+//printName(yourName4)
+// nil 값이 전달되기 때문에 런타임 오류 발생
+
+// 10. 구조체
+// struct 이름 {
+//    구현부
+// }
+
+struct Sample {
+    var mutableProperty: Int = 100 // 가변 프로퍼티
+    let immutableProperty: Int = 100 // 불변 프로퍼티
+    static var typeProperty: Int = 100 // 타입 프로퍼티
+    
+// 인스턴스 메서드
+    func instanceMethod() {
+        print("instance method")
+        
+    }
+    
+// 타입 메서드
+    static func typeMethod() {
+        print("type method")
+    }
+    
+}
+    
+//구조체 사용
+//가변 인스턴스
+var mutable: Sample = Sample()
+
+mutable.mutableProperty = 200
+//mutable.immutableProperty = 200
+
+// 불변 인스턴스
+let immutable: Sample = Sample()
+
+//immutable.mutableProperty = 200
+//immutable.immutableProperty = 200
+
+
+// 타입 프로퍼티 및 메서드
+Sample.typeProperty = 300
+Sample.typeMethod() // type method
+
+// 인스턴스에서는 타입 프로퍼티나 타입 메서드를 사용할 수 없다
+// 컴파일 오류 발생
+//mutable.typeProperty = 400
+//mutable.typeMethod()
+
+
+//학생 구조체
+struct Student {
+    // 가변 프로퍼티
+    var name: String = "unknown"
+    
+    // 키워드도 `로 묶어주면 이름으로 사용할 수 있습니다
+    var `class`: String = "Swift"
+    
+    // 타입 메서드
+    static func selfIntroduce() {
+        print("학생타입입니다")
+    }
+    
+    // 인스턴스 메서드
+    func selfIntroduce() {
+        print("저는 \(self.class)반 \(name)입니다")
+    }
+}
+
+Student.selfIntroduce() // 학생타입입니다
+
+// 가변 인스턴스 생성
+var yagom: Student = Student()
+yagom.name = "yagom"
+yagom.class = "스위프트"
+yagom.selfIntroduce()   // 저는 스위프트반 yagom입니다
+
+// 불변 인스턴스 생성
+let jina: Student = Student()
+
+// 불변 인스턴스이므로 프로퍼티 값 변경 불가
+// 컴파일 오류 발생
+//jina.name = "jina"
+jina.selfIntroduce() // 저는 Swift반 unknown입니다
+
+// 11. 클래스
+
+// class 이름 {
+//     구현부
+// }
+
+
+//프로퍼티 및 메서드 구현
+// 클래스는 다중상속이 되지 않음
+// 상속 후 재정의가 가능한 class 타입메서드
+// 상속 후 재정의가 불가능한 static 타입메서드
+
+class Sample2 {
+    // 가변 프로퍼티
+    var mutableProperty: Int = 100
+    
+    // 불변 프로퍼티
+    let immutableProperty: Int = 100
+    
+    // 타입 프로퍼티
+    static var typeProperty: Int = 100
+    
+    // 인스턴스 메서드
+    func instanceMethod() {
+        print("instance method")
+    }
+    
+    // 타입 메서드
+    // 재정의 불가 타입 메서드 - static
+    static func typeMethod() {
+        print("type method - static")
+    }
+    
+    // 재정의 가능 타입 메서드 - class
+    class func classMethod() {
+        print("type method - class")
+    }
+}
+
+
+//클래스 사용
+// 인스턴스 생성 - 참조정보 수정 가능
+var mutableReference: Sample2 = Sample2()
+
+mutableReference.mutableProperty = 200
+
+// 불변 프로퍼티는 인스턴스 생성 후 수정할 수 없습니다
+// 컴파일 오류 발생
+//mutableReference.immutableProperty = 200
+
+
+// 인스턴스 생성 - 참조정보 수정 불가
+let immutableReference: Sample2 = Sample2()
+
+// 클래스의 인스턴스는 참조 타입이므로 let으로 선언되었더라도 인스턴스 프로퍼티의 값 변경이 가능합니다
+immutableReference.mutableProperty = 200
+
+// 다만 참조정보를 변경할 수는 없습니다
+// 컴파일 오류 발생
+//immutableReference = mutableReference
+
+// 참조 타입이라도 불변 인스턴스는
+// 인스턴스 생성 후에 수정할 수 없습니다
+// 컴파일 오류 발생
+//immutableReference.immutableProperty = 200
+
+
+// 타입 프로퍼티 및 메서드
+Sample.typeProperty = 300
+Sample.typeMethod() // type method
+
+// 인스턴스에서는 타입 프로퍼티나 타입 메서드를
+// 사용할 수 없습니다
+// 컴파일 오류 발생
+//mutableReference.typeProperty = 400
+//mutableReference.typeMethod()
+
+
+//학생 클래스 만들어보기
+class Student2 {
+    // 가변 프로퍼티
+    var name: String = "unknown"
+    
+    // 키워드도 `로 묶어주면 이름으로 사용할 수 있습니다
+    var `class`: String = "Swift"
+    
+    // 타입 메서드
+    class func selfIntroduce() {
+        print("학생타입입니다")
+    }
+    
+    // 인스턴스 메서드
+    // self는 인스턴스 자신을 지칭
+    // 몇몇 경우를 제외하고 사용은 선택사항
+    func selfIntroduce() {
+        print("저는 \(self.class)반 \(name)입니다")
+    }
+}
+
+// 타입 메서드 사용
+Student.selfIntroduce()
+
+// 인스턴스 생성
+var yagom2: Student2 = Student2()
+yagom2.name = "yagom"
+yagom2.class = "스위프트"
+yagom2.selfIntroduce()
+
+// 인스턴스 생성
+let jina2: Student2 = Student2()
+jina2.name = "jina"
+jina2.selfIntroduce()
+
+// 12. 열거형
+//스위프트의 열거형은 다른 언어의 열거형과는 많이 다름. 잘 살펴보아야 할 스위프트의 기능 중 하나이다
+
+// enum은 타입이므로 대문자 카멜케이스를 사용하여 이름을 정의.
+// 각 case는 소문자 카멜케이스로 정의.
+// 각 case는 그 자체가 고유의 값.
+// 각 케이스는 한 줄에 개별로도, 한 줄에 여러개도 정의할 수 있습니다
+// enum 이름 {
+//     case 이름1
+//     case 이름2
+//     case 이름3, 이름4, 이름5
+//     // ...
+// }
+
+
+// 열거형 사용
+enum Weekday {
+    case mon
+    case tue
+    case wed
+    case thu, fri, sat, sun
+}
+
+// 열거형 타입과 케이스를 모두 사용하여도 됩니다
+var day: Weekday = Weekday.mon
+
+// 타입이 명확하다면 .케이스 처럼 표현해도 무방합니다
+day = .tue
+
+print(day) // tue
+
+// switch의 비교값에 열거형 타입이 위치할 때
+// 모든 열거형 케이스를 포함한다면 default를 작성할 필요가 없음
+switch day {
+case .mon, .tue, .wed, .thu:
+    print("평일입니다")
+case Weekday.fri:
+    print("불금 파티!!")
+case .sat, .sun:
+    print("신나는 주말!!")
+}
+
+
+// 원시값
+// C 언어의 enum처럼 정수값을 가질 수도 있다. rawValue를 사용하면 된다.
+//case별로 각각 다른 값을 가져야한다.
+
+enum Fruit: Int {
+    case apple = 0
+    case grape = 1
+    case peach
+    
+// mango와 apple의 원시값이 같으므로 mango 케이스의 원시값을 0으로 정의할 수 없다
+//    case mango = 0
+}
+
+print("Fruit.peach.rawValue == \(Fruit.peach.rawValue)")
+
+// 정수 타입 뿐만 아니라 Hashable 프로토콜을 따르는 모든 타입이 원시값의 타입으로 지정될 수 있습니다.
+enum School: String {
+    case elementary = "초등"
+    case middle = "중등"
+    case high = "고등"
+    case university
+}
+
+print("School.middle.rawValue == \(School.middle.rawValue)")
+
+// 열거형의 원시값 타입이 String일 때, 원시값이 지정되지 않았다면
+// case의 이름을 원시값으로 사용합니다
+print("School.university.rawValue == \(School.university.rawValue)")
+
+
+// 원시값을 통한 초기화
+// rawValue를 통해 초기화 할 수 있습니다. rawValue가 case에 해당하지 않을 수 있으므로 rawValue를 통해 초기화 한 인스턴스는 옵셔널 타입입니다.
+
+// rawValue를 통해 초기화 한 열거형 값은 옵셔널 타입이므로 Fruit 타입이 아닙니다
+//let apple: Fruit = Fruit(rawValue: 0)
+let apple: Fruit? = Fruit(rawValue: 0)
+
+// if let 구문을 사용하면 rawValue에 해당하는 케이스를 곧바로 사용할 수 있습니다
+if let orange: Fruit = Fruit(rawValue: 5) {
+    print("rawValue 5에 해당하는 케이스는 \(orange)입니다")
+} else {
+    print("rawValue 5에 해당하는 케이스가 없습니다")
+}
+
+// 메서드
+// 스위프트의 열거형에는 메서드도 추가할 수 있다.
+
+enum Month {
+    case dec, jan, feb
+    case mar, apr, may
+    case jun, jul, aug
+    case sep, oct, nov
+    
+    func printMessage() {
+        switch self {
+        case .mar, .apr, .may:
+            print("따스한 봄~")
+        case .jun, .jul, .aug:
+            print("여름 더워요~")
+        case .sep, .oct, .nov:
+            print("가을은 독서의 계절!")
+        case .dec, .jan, .feb:
+            print("추운 겨울입니다")
+        }
+    }
+}
+
+Month.mar.printMessage()
+
+
+// 13. 클래스, 구조체, 열거형 비교
+// Class
+// 전통적인 OOP 관점에서의 클래스
+// 단일상속
+// (인스턴스/타입) 메서드
+// (인스턴스/타입) 프로퍼티
+// 참고타입
+// 애플 프레임워크의 대부분의 큰 뼈대는 모둔 구조체로 구성
+
+// Struct
+// C언어 등의 구조체보다 다양한 기능
+// 상속 불가
+// (인스턴스/타입) 메서드
+//(인스턴스/타입) 프로퍼티
+// 값타입
+// 스위프트 대부분의 큰 뼈대는 모두 구조체로 구성
+
+// Enum( 열거형 )
+// 다른 언어의 열거형과는 많이 다른 존재
+// 상속불가
+// (인스턴스/타입) 메서드
+// (인스턴스/타입) 연산 프로퍼티
+// 값타입
+// 유사한 종류의 여러 값을 유의미한 이름으로 한 곳에 모아 정의
+// 예) 요일,상태값, 월(month)등
+// 열거형 자체가 하나의 데이터 타입
+// 열거형의 케이스 하나하나 전부 하나의 유의미한 값으로 취급
+// 선언 키워드 : enum
+
+// 열거형과 구조체는 값 타입이며, 클래스는 참조 타입이라는 것이 가장 큰 차이.
+// 또한, 클래스는 상속이 가능하지만 구조체와 열거형은 상속이 불가능
+
+// 구조체는 언제 사용하나?
+// 연관된 몇몇의 값을 모아서 하나의 데이터 타입으로 표현하고 싶을때
+// 다른 객체 또는 함수 등으로 전달될 때. 참조가 아닌 복사를 원할 때
+// 자신을 상속할 필요가 없거나 자신이 다른 타입을 상속받을 필요가 없을 때
+// 애플 프레임워크에서 프로그래밍을 할 때에는 주로 클래스를 많이 사용
+
+// Value vs Reference
+// Value : 데이터를 전달할 때 값을 복사해서 전달
+// Referencd : 데이터는 전달할 때 값의 메모리 위치를 전달
+
+struct ValueType { //구조체
+    var property = 1
+}
+
+class ReferenceType { //클래스
+    var property = 1
+}
+
+
+let firstStructInstance = ValueType()
+var secondStructInstance = firstStructInstance
+secondStructInstance.property = 2
+
+// 두 번째 구조체 인스턴스는 첫 번째 구조체를 똑같이 복사한 별도의 인스턴스이기 때문에
+// 두 번째 구조체 인스턴스의 프로퍼티 값을 변경해도
+// 첫 번째 구조체 인스턴스의 프로퍼티 값에는 영향이 없음
+print("first struct instance property : \(firstStructInstance.property)")    // 1
+print("second struct instance property : \(secondStructInstance.property)")  // 2
+
+
+let firstClassReference = ReferenceType()
+let secondClassReference = firstClassReference
+secondClassReference.property = 2
+
+// 두 번째 클래스 참조는 첫 번째 클래스 인스턴스를 참조하기 때문에
+// 두 번째 참조를 통해 인스턴스의 프로퍼티 값을 변경하면
+// 첫 번째 클래스 인스턴스의 프로퍼티 값을 변경하게 됨
+print("first class reference property : \(firstClassReference.property)")    // 2
+print("second class reference property : \(secondClassReference.property)")  // 2
+
+struct SomeStruct {
+    var someProperty: String = "Property"
+}
+
+var omeStructInstance: SomeStruct = SomeStruct()
+
+func someFunction(structInstance: SomeStruct) {
+    var lovalVar: SomeStruct = structInstance
+    lovalVar.someProperty = "ABC"
+}
+
+someFunction(structInstance: omeStructInstance)
+print(omeStructInstance.someProperty) //Property
+
+
+class SomeClass2 {
+    var someProperty: String = "Property"
+}
+var someClassInstance: SomeClass2 = SomeClass2()
+
+func someFunction2(classInstance: SomeClass2) {
+    var localVar2: SomeClass2 = classInstance
+    localVar2.someProperty = "ABC"
+}
+
+someFunction2(classInstance: someClassInstance)
+print(someClassInstance.someProperty)
+
+//public struct Int, Double, String, Dictionary<Key : Hashable, Value>, Arrya<Element>, Set<Element : hashable>
+
+// 스위프트는 구조체, 열거형 사용을 선호
+// 애플 프레임워크는 대부분 클래스 사용
+// 애플 프레임워크 사용시 구조체/클래스 선택은 개발자 몫
+
+// 14. 클로저
+// 14.1 클로저 고급
+// 15. 프로퍼티
+// 16. 상속
