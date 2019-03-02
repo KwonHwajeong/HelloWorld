@@ -970,6 +970,442 @@ print(someClassInstance.someProperty)
 // 애플 프레임워크 사용시 구조체/클래스 선택은 개발자 몫
 
 // 14. 클로저
+// 코드의 블럭
+// 일급 시민(frist-citizen)
+// 변수, 상수 등으로 저장, 전달인자로 전달이 가능
+// 함수 : 이름이 있는 클로저
+    
+// 기본 클로저 문법
+// { (매개변수 목록) -> 반환타입 in
+//        실행 코드
+// }
+// 매개변수가 필요없으면 매개변수 목록은 비워 두어도 된다.
+// 반환값이 없으면 void
+
+// 함수를 사용한다면
+func sumFunction(a: Int, b: Int) -> Int {
+    return a + b
+}
+
+var sumResult: Int = sumFunction(a: 1, b: 2)
+print(sumResult) //3
+
+// 클로저 사용시
+let sum1: (Int, Int) -> Int = { (a: Int, b: Int) in
+    return a + b
+}
+
+sumResult = sum1(1, 2)
+print(sumResult) // 3
+
+
+//함수의 전달인자로서의 클로저
+//클로저는 주로 함수의 전달인자로 많이 사용. 함수 내부에서 원하는 코드블럭을 실행할 수 있다.
+
+let add: (Int, Int) -> Int
+add = { (a: Int, b: Int) in
+    return a + b
+} //중괄호 안에 있는 부분이 클로저
+
+let substract: (Int, Int) -> Int
+substract = { (a: Int, b: Int) in
+    return a - b
+}
+
+let divide: (Int, Int) -> Int
+divide = { (a: Int, b: Int) in
+    return a / b
+}
+
+func calculate(a: Int, b: Int, method: (Int, Int) -> Int) -> Int {
+    return method(a, b) //함수안에서 전달받은 클로저를 호출
+}
+
+var calculated: Int
+
+calculated = calculate(a: 50, b: 10, method: add)
+print(calculated) // 60
+
+calculated = calculate(a: 50, b: 10, method: substract)
+print(calculated) // 40
+
+calculated = calculate(a: 50, b: 10, method: divide)
+print(calculated) // 5
+
+//따로 클로저를 상수/변수에 넣어 전달하지 않고, 함수를 호출할 때 클로저를 작성하여 전달할 수도 있습니다.
+calculated = calculate(a: 50, b: 10, method: { (left: Int, right: Int) -> Int in
+    return left * right
+})
+
+print(calculated) // 500
+
+/* 다양한 클로저표현
+클로저는 다양한 모습으로 표현될 수 있습니다.
+
+함수의 매개변수 마지막으로 전달되는 클로저는 후행클로저(trailing closure)로 함수 밖에 구현할 수 있습니다.
+컴파일러가 클로저의 타입을 유추할 수 있는 경우 매개변수, 반환 타입을 생략할 수 있습니다.
+반환 값이 있는 경우, 암시적으로 클로저의 맨 마지막 줄은 return 키워드를 생략하더라도 반환 값으로 취급합니다.
+전달인자의 이름이 굳이 필요없고, 컴파일러가 타입을 유추할 수 있는 경우 축약된 전달인자 이름($0, $1, $2...)을 사용 할 수 있습니다. */
+
 // 14.1 클로저 고급
+//주의점 : 다양한 표현법이 있기 때문에 남이 이해하기 적당한 선에서 축약 문법을 사용하는 것이 좋다.
+//클로저 매개변수를 갖는 함수 calculate(a:b:method:)와 결과값을 저장할 변수 result를 먼저 선언해둔다.
+
+func calculate14(a: Int, b: Int, method: (Int, Int) -> Int) -> Int {
+    return method(a, b)
+}
+
+var result: Int
+
+
+//후행 클로저
+//클로저가 함수의 마지막 전달인자라면 마지막 매개변수 이름을 생략한 후 함수 소괄호 외부에 클로저를 구현할 수 있다.
+
+result = calculate14(a: 10, b: 10) { (left: Int, right: Int) -> Int in
+    return left + right
+}
+print(result) // 20
+
+
+// 반환타입 생략
+// calculate(a:b:method:) 함수의 method 매개변수는 Int 타입을 반환할 것이라는 사실을
+// 컴파일러도 알기 때문에 굳이 클로저에서 반환타입을 명시해 주지 않아도 됩니다.
+// 대신 in 키워드는 생략할 수 없습니다.
+
+result = calculate14(a: 10, b: 10, method: { (left: Int, right: Int) in
+        return left + right
+    }
+)
+print(result) // 20
+
+// 후행클로저와 함께 사용할 수도 있습니다
+result = calculate14(a: 10, b: 10) { (left: Int, right: Int) in
+    return left + right
+}
+print(result) // 20
+
+
+// 단축 인자이름
+// 클로저의 매개변수 이름이 굳이 불필요하다면 단축 인자이름을 활용할 수 있다
+// 단축 인자이름은 클로저의 매개변수의 순서대로 $0, $1, $2... 처럼 표현한다.
+
+result = calculate14(a: 10, b: 10, method: {
+return $0 + $1
+})
+print(result) // 20
+
+
+// 당연히 후행 클로저와 함께 사용할 수 있습니다
+result = calculate14(a: 10, b: 10) {
+    return $0 + $1
+}
+print(result) // 20
+
+
+// 암시적 반환 표현
+// 클로저가 반환하는 값이 있다면 클로저의 마지막 줄의 결과값은 암시적으로 반환값으로 취급한다.
+
+result = calculate14(a: 10, b: 10) {
+    $0 + $1 //마지막 줄은 당연히 리턴으로 처리됨
+}
+print(result) // 20
+
+// 간결하게 한 줄로 표현해 줄 수도 있다.
+result = calculate14(a: 10, b: 10) { $0 + $1 }
+print(result) // 20
+
+
+//축약 전과 후 비교
+//축약 전
+result = calculate14(a: 10, b: 10, method: { (left: Int, right: Int) -> Int in
+    return left + right
+})
+
+//축약 후
+result = calculate14(a: 10, b: 10) { $0 + $1 }
+
+print(result) // 20
+
 // 15. 프로퍼티
+/* 프로퍼티의 종류
+저장 프로퍼티
+연산 프로퍼티
+인스턴스 프로퍼티
+타입 프로퍼티
+*/
+
+
+/* 프로퍼티는 구조체, 클래스, 열거형 내부에 구현할 수 있습니다.
+ 다만 열거형 내부에는 연산 프로퍼티만 구현할 수 있습니다.
+ 연산 프로퍼티는 var로만 선언할 수 있습니다.
+*/
+
+struct Student1 {
+    
+    // 인스턴스 저장 프로퍼티 : 값을 저장해 주기 위한 것.
+    var name: String = ""
+    var `class`: String = "Swift"
+    var koreanAge: Int = 0
+    
+    // 인스턴스 연산 프로퍼티 : 특정한 연산을 수행해 주기 위한 것.
+    var westernAge: Int {
+        get {
+            return koreanAge - 1
+        }
+        
+        set(inputValue) {
+            koreanAge = inputValue + 1
+        }
+    }
+    
+    // 타입 저장 프로퍼티
+    static var typeDescription: String = "학생"
+    
+    /*
+     // 인스턴스 메서드
+     func selfIntroduce() {
+     print("저는 \(self.class)반 \(name)입니다")
+     }
+     */
+    
+    // 읽기전용 인스턴스 연산 프로퍼티(get)
+    // 간단히 위의 selfIntroduce() 메서드를 대체할 수 있습니다
+    var selfIntroduction: String {
+        get {
+            return "저는 \(self.class)반 \(name)입니다"
+        }
+    }
+    
+    /*
+     // 타입 메서드
+     static func selfIntroduce() {
+     print("학생타입입니다")
+     }
+     */
+    
+    // 읽기전용 타입 연산 프로퍼티
+    // 읽기전용에서는 get을 생략할 수 있습니다
+    static var selfIntroduction: String {
+        return "학생타입입니다"
+    }
+}
+
+// 타입 연산 프로퍼티 사용
+print(Student1.selfIntroduction)
+// 학생타입입니다
+
+// 인스턴스 생성
+var yagom1: Student1 = Student1()
+yagom1.koreanAge = 10
+
+// 인스턴스 저장 프로퍼티 사용
+yagom1.name = "yagom"
+print(yagom1.name)
+// yagom
+
+// 인스턴스 연산 프로퍼티 사용
+print(yagom1.selfIntroduction)
+// 저는 Swift반 yagom입니다
+
+print("제 한국나이는 \(yagom1.koreanAge)살이고, 미쿡나이는 \(yagom1.westernAge)살입니다.") //연산 프로퍼티
+// 제 한국나이는 10살이고, 미쿡나이는 9살입니다.
+
+
+//응용
+struct Money {
+    var currencyRate: Double = 1100
+    var dollar: Double = 0
+    var won: Double { //달러->원 환산
+        get {
+            return dollar * currencyRate
+        }
+        set {
+            dollar = newValue / currencyRate
+        }
+    }
+}
+
+var moneyInMyPocket = Money()
+
+moneyInMyPocket.won = 11000
+print(moneyInMyPocket.won)
+// 11000
+
+moneyInMyPocket.dollar = 10
+print(moneyInMyPocket.won)
+// 11000
+
+/*
+지역변수 및 전역변수
+저장 프로퍼티와 연산 프로퍼티의 기능은 함수, 메서드, 클로저, 타입 등의 외부에 위치한 지역/전역 변수에도 모두 사용 가능합니다.
+*/
+
+var a15: Int = 100
+var b15: Int = 200
+var sum15: Int {
+    return a15 + b15
+}
+
+print(sum15) // 300
+
+
+// 15.1 프로퍼티 감시자
+
+/*
+ 프로퍼티 감시자를 사용하면 프로퍼티 값이 변경될 때 원하는 동작을 수행할 수 있다.
+ */
+
+struct Money15 {
+    // 저장 프로퍼티 감시자 사용
+    var currencyRate: Double = 1100 {
+        willSet(newRate) { //바뀌기 전의 값
+            print("환율이 \(currencyRate)에서 \(newRate)으로 변경될 예정입니다")
+        }
+        
+        didSet(oldRate) { //바뀐 후의 값
+            print("환율이 \(oldRate)에서 \(currencyRate)으로 변경되었습니다")
+        }
+    }
+    
+    // 프로퍼티 감시자 사용
+    var dollar: Double = 0 {
+        // willSet의 암시적 매개변수 이름 newValue
+        willSet { //암시적 매개변수의 이름 생략 가능
+            print("\(dollar)달러에서 \(newValue)달러로 변경될 예정입니다")
+        }
+        
+        // didSet의 암시적 매개변수 이름 oldValue
+        didSet {
+            print("\(oldValue)달러에서 \(dollar)달러로 변경되었습니다")
+        }
+    }
+    
+    // 연산 프로퍼티
+    var won: Double {
+        get {
+            return dollar * currencyRate
+        }
+        set {
+            dollar = newValue / currencyRate
+        }
+        
+        /* 프로퍼티 감시자와 연산 프로퍼티 기능을 동시에 사용할 수 없다
+         willSet {
+         
+         }
+         */
+    }
+}
+
+var moneyInMyPocket1: Money = Money()
+// 환율이 1100.0에서 1150.0으로 변경될 예정입니다
+moneyInMyPocket1.currencyRate = 1150
+// 환율이 1100.0에서 1150.0으로 변경되었습니다
+
+// 0.0달러에서 10.0달러로 변경될 예정입니다
+moneyInMyPocket1.dollar = 10
+// 0.0달러에서 10.0달러로 변경되었습니다
+
+print(moneyInMyPocket1.won)
+// 11500.0
+
 // 16. 상속
+/*
+ 스위프트의 상속은 클래스, 프로토콜 등에서 가능하다
+ 열거형, 구조체는 상속 불가
+ 시위프트는 다중상속을 지원하지 않음
+ 무조건 단일 상속
+ */
+/*
+// 클래스의 상속과 재정의
+class 이름: 상속받을 클래스 이름 {
+    /* 구현부 */
+}
+*/
+
+// 기본 클래스 Person
+class Person {
+    var name: String = ""
+    
+    func selfIntroduce() {
+        print("저는 \(name)입니다")
+    }
+    
+    // final 키워드를 사용하여 자식 클래스에서 재정의를 방지할 수 있습니다
+    final func sayHello() {
+        print("hello")
+    }
+    
+    // 타입 메서드
+    // 자식클래스에서 재정의 불가 타입 메서드 - static
+    static func typeMethod() {
+        print("type method - static")
+    }
+    
+    // 자식 클래스에서 재정의 가능 타입 메서드 - class
+    class func classMethod() {
+        print("type method - class")
+    }
+    
+    // 재정의 가능한 class 메서드라도 final 키워드를 사용하면 재정의 할 수 없습니다
+    // 메서드 앞의 `static`과 `final class`는 똑같은 역할을 합니다
+    final class func finalCalssMethod() {
+        print("type method - final class")
+    }
+}
+
+// Person을 상속받는 Student
+class Student16: Person {
+//    var name: String = "" 컴파일 오류, name은 위에서 상속받아서 오류남
+    var major: String = ""
+    
+    override func selfIntroduce() { //새로운 동작구현(덮어씌워짐)
+        print("저는 \(name)이고, 전공은 \(major)입니다")
+//        super.selfIntroduce() 부모클래스를 호출하게 됨
+    }
+    
+    override class func classMethod() { //클래스는 재정의 가능.
+        print("overriden type method - class")
+    }
+    
+    // static을 사용한 타입 메서드는 재정의 할 수 없습니다
+    //    override static func typeMethod() {    }
+    
+    // final 키워드를 사용한 메서드, 프로퍼티는 재정의 할 수 없습니다
+    //    override func sayHello() {    }
+    //    override class func finalClassMethod() {    }
+    
+}
+
+
+let yagom16: Person = Person()
+let hana: Student16 = Student16()
+
+yagom16.name = "yagom"
+hana.name = "hana"
+hana.major = "Swift"
+
+yagom16.selfIntroduce()
+// 저는 yagom입니다
+
+hana.selfIntroduce()
+// 저는 hana이고, 전공은 Swift입니다
+
+Person.classMethod()
+// type method - class
+
+Person.typeMethod()
+// type method - static
+
+Person.finalCalssMethod()
+// type method - final class
+
+
+Student16.classMethod()
+// overriden type method - class
+
+Student16.typeMethod()
+// type method - static
+
+Student16.finalCalssMethod()
+// type method - final class
