@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Chapter12_1" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="01.png" translatesAutoresizingMaskIntoConstraints="NO" id="lyS-lc-aKM">
+                                <rect key="frame" x="16" y="44" width="343" height="734"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="734" id="CwQ-5K-Lyn"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="lyS-lc-aKM" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="-20" id="FCG-bF-cqg"/>
+                            <constraint firstItem="lyS-lc-aKM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="NfB-Ih-YCh"/>
+                            <constraint firstAttribute="bottom" secondItem="lyS-lc-aKM" secondAttribute="bottom" id="VGT-Hw-asX"/>
+                            <constraint firstAttribute="bottom" secondItem="lyS-lc-aKM" secondAttribute="bottom" id="Yjm-fX-5Nb"/>
+                            <constraint firstItem="lyS-lc-aKM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="16" id="gTT-gB-hbR"/>
+                            <constraint firstItem="lyS-lc-aKM" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" constant="16" id="i9w-DG-uLy"/>
+                            <constraint firstItem="lyS-lc-aKM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="mTW-hX-Tte"/>
+                            <constraint firstItem="lyS-lc-aKM" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottomMargin" id="pzd-E8-Nxe"/>
+                            <constraint firstAttribute="trailing" secondItem="lyS-lc-aKM" secondAttribute="trailing" constant="16" id="q9W-ce-RdP"/>
+                            <constraint firstItem="lyS-lc-aKM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="wPY-ut-Ut5"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.74384236453201"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="01.png" width="1686" height="2448"/>
+    </resources>
+</document>
